@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,10 +9,17 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    private struct Constants
+    {
+        public static string filePathName = "/player.json";
+    }
     
-    public Text playerName;
-
+    public static GameManager Instance;
+    public Player player = new Player();
+    
+    public InputField playerField;
+    public Text titleText;
+    
     private void Awake()
     {
         if (Instance != null)
@@ -22,10 +30,58 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        
+        LoadPlayer();
+    }
+    
+    [Serializable]
+    public class Player
+    {
+        public String name;
+        public int score;
+    }
+    
+    public void SavePlayer()
+    {
+        // we should to update best player name
+        player.name = playerField.text;
+
+        var json = JsonUtility.ToJson(player);
+        File.WriteAllText(Application.persistentDataPath + Constants.filePathName, json);
     }
 
-    public String GetPlayerName()
+    public void LoadPlayer()
     {
-        return playerName.text ?? "Unknown player";
+        var path = Application.persistentDataPath + Constants.filePathName;
+        if (File.Exists(path))
+        {
+            var json = File.ReadAllText(path);
+            var savedPlayer = JsonUtility.FromJson<Player>(json);
+
+            player.name = savedPlayer.name;
+            player.score = savedPlayer.score;
+
+            // prepare field name
+            playerField.text = player.name;
+        }
+        else
+        {
+            SetupDefaultPlayer();
+        }
+
+        UpdateTitleText();
+    }
+
+    private void UpdateTitleText()
+    {
+        titleText.text = $"Best Score: {player.name} -> {player.score}";
+    }
+
+    private void SetupDefaultPlayer()
+    {
+        player.name = playerField.text ?? "Unknown";
+        player.score = 0;
+        
+        SavePlayer();
     }
 }

@@ -158,7 +158,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 70}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 560, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &24224828
 MonoBehaviour:
@@ -862,7 +862,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6317bacbc0254b4eac26f67fb79e7a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: {fileID: 317483655}
+  playerNameText: {fileID: 317483655}
+  titleText: {fileID: 24224828}
+  player:
+    name: 
+    score: 0
 --- !u!4 &910461052
 Transform:
   m_ObjectHideFlags: 0
