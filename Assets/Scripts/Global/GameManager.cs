@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     
     public static GameManager Instance;
     public Player player = new Player();
+    private String currentPlayerName;
     
     public InputField playerField;
     public Text titleText;
@@ -40,11 +41,16 @@ public class GameManager : MonoBehaviour
         public String name;
         public int score;
     }
+
+    public void SaveCurrentPlayerName()
+    {
+        currentPlayerName = playerField.text;
+    }
     
     public void SavePlayer()
     {
         // we should to update best player name
-        player.name = playerField.text;
+        player.name = currentPlayerName;
 
         var json = JsonUtility.ToJson(player);
         File.WriteAllText(Application.persistentDataPath + Constants.filePathName, json);
@@ -83,5 +89,11 @@ public class GameManager : MonoBehaviour
         player.score = 0;
         
         SavePlayer();
+    }
+
+    private void ClearData()
+    {
+        string[] filePaths = Directory.GetFiles(Application.persistentDataPath); 
+        foreach (string filePath in filePaths) File.Delete(filePath);
     }
 }

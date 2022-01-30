@@ -23,6 +23,7 @@ public class MenuScript : MonoBehaviour
 
     public void StartGame()
     {
+        GameManager.Instance.SaveCurrentPlayerName();
         SceneManager.LoadScene(1);
     }
     
